@@ -279,7 +279,8 @@ class Disc2Digital
          # Convert the title to String just in case the movie was all numeric (300).  Then try a straight compare first
          if movie[:title].to_s.downcase.strip == self.title.downcase.strip
             #puts "if #{movie[:title].to_s.downcase.strip} == #{self.title.downcase.strip} - #{self.disc_type}"
-            puts "PERFECT MATCH FOR: #{self.title} #{movie[:title]} (#{self.disc_type}): "
+            #puts "PERFECT MATCH FOR: #{self.title} #{movie[:title]} (#{self.disc_type}): "
+            puts "Perfect match for: #{self.title} (#{self.disc_type}): "
 
             [ :sameQualityPrice, :sameQualityLabel, :upgradeQualityPrice, :upgradeQualityLabel ].each{|key|
                puts "#{key}:".rjust(25) + " #{movie[key].to_s.upcase}" if not movie[key].nil?
@@ -302,8 +303,9 @@ class Disc2Digital
 
             break
          else
-            lcs = Diff::LCS.LCS(movie[:title].downcase.strip, self.title.downcase.strip).join # Longest common substring
-            percentage = BigDecimal((lcs.size / self.title.size) * 100)
+            #lcs = Diff::LCS.LCS(movie[:title].downcase.strip, self.title.downcase.strip).join # Longest common substring
+            #percentage = BigDecimal((lcs.size / self.title.size) * 100)
+            percentage = self.title.similar(movie[:title]) # BigDecimal((lcs.size / self.title.size) * 100)
         
             #if percentage >= 70
             #   puts "\tFOUND #{percentage}% MATCH FOR: #{self.title} #{movie[:title]} (#{self.disc_type})"
@@ -319,8 +321,9 @@ class Disc2Digital
             #   next
             #end
 
+            # TODO: Add --percentage option to replace 70.0
             if percentage >= 70.0
-               puts "\tFOUND #{percentage}% MATCH FOR: #{self.title} #{movie[:title]} (#{self.disc_type})"
+               puts "\tMatched #{percentage}% for: #{self.title} -> #{movie[:title]} (#{self.disc_type})"
 
               [ :sameQualityPrice, :sameQualityLabel, :upgradeQualityPrice, :upgradeQualityLabel ].each{|key|
                  puts "#{key}:".rjust(25) + " #{movie[key].to_s.upcase}" if not movie[key].nil?

@@ -5,6 +5,7 @@ TODO:
   1.2. --catalog (Movies.csv)
   1.3. --cache-dir (entry_dir; Cached results, picks up where you left off)
   1.4. --init (Creates ~/.vudu/cache/, ~/.vudu.conf)
+  1.5. --percentage (If not a perfect match, only print results >= percentage)
 
   2. The results output is lame.  You should probably fix that.
 
