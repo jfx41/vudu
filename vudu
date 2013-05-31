@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+require 'vudu/disc2digital'
+
+d2d = Vudu::D2D.new ARGV[0] || 'My Movies.csv'
+
+upgrade = 0
+cost    = 0
+same_quality = 0
+upgrade_quality = 0
+mixitup = Random.new
+
+while d2d.entry != nil
+   #puts "D2D.class(#{d2d.pos}): #{d2d.title.class} #{d2d.title}"
+   entry_dir = "catalog/#{d2d.id}"
+   entry_json = "#{entry_dir}/#{d2d.barcode}.json"
+
+   #puts "\tBARCODE: #{d2d.barcode}"
+
+   # Skip ones we've manually added that weren't in the database
+   if d2d.barcode =~ /^000000000000/
+      d2d.next
+      next
+   # Skip ones we've done so we don't get caught hammering the system over and over.
+   #next if (File.exist? entry_json) and (File.size? entry_json) > 0
+   elsif (File.exist? entry_json) and (File.size? entry_json) > 0
+      d2d.next
+      next
+   end
+
+   #
+   # Remove extra crap in [] or ()
+   #
+   # 12 Monkeys / Mercury Rising / The Jackal (Triple Feature)
+   # Dreamer [Le Rêveur: inspiré d'une histoire vraie]
+   # Follow The River (DVD/CD Combo)
+   # The Bourne Identity [La Mémoire dans la peau]
+   #
+
+   d2d.title.gsub!(/[(\[].*?[)\]]/, "").strip! if d2d.title =~ /[(\[].*?[)\]]/
+   d2d.title.gsub!(/\s*?\x2f\s*?/, ", ")
+   d2d.title.gsub!(/\s+/, " ")
+
+   #puts "#{d2d.id} #{d2d.title}: #{d2d.title.class}"
+
+   # Search for this title
+   json = d2d.query d2d.title
+
+   #Dir.mkdir "catalog/#{d2d.id}" unless File.directory? "catalog/#{id}"
+   Dir.mkdir entry_dir unless File.directory? entry_dir
+
+   File.open(entry_json, "w") do |f|
+      f.write JSON.pretty_generate json 
+   end
+
+   #if d2d.total_count > 0
+   #   puts JSON.pretty_generate json
+   #   #puts "#{d2d.id}) #{d2d.title}: #{d2d.total_count} -> sleeping for #{slp} seconds\n\t#{json}"
+   #end
+   #puts "#{d2d.id}. #{d2d.title} (#{d2d.disc_type}): #{d2d.total_count} (sleeping #{slp} seconds)"
+
+   slp = mixitup.rand(12)
+   sleep slp
+
+   #puts JSON.pretty_generate json
+   #puts CGI::escape d2d.title
+
+   #puts d2d.title.tr("\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f", "").tr("\s", "_")
+   #puts d2d.title.tr("\x21-\x2f\x3b-\x40\x5b-\x60\x7b-\x7f", "").tr("\s", "_")
+   #puts "#{d2d.id}: #{d2d.title} (#{d2d.disc_type}) #{d2d.year}"
+
+   d2d.next
+end
+
+puts "#"*100
+print "\n\n"
+puts "Total same quality cost: $#{d2d.same_quality}"
+puts "Total upgrade quality cost: $#{d2d.upgrade_quality}"
+puts "Total Ultraviolet movies in collection: $#{d2d.ultraviolet}"
+
+exit 0
+
+# EOF
