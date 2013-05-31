@@ -77,11 +77,11 @@ while d2d.entry != nil
    d2d.next
 end
 
-puts "#"*100
 print "\n\n"
-puts "Total same quality cost: $#{d2d.same_quality}"
-puts "Total upgrade quality cost: $#{d2d.upgrade_quality}"
-puts "Total Ultraviolet movies in collection: $#{d2d.ultraviolet}"
+puts "Total same quality cost: ".rjust(30) + "$#{d2d.same_quality}"
+puts "Total upgrade quality cost: ".rjust(30) + "$#{d2d.upgrade_quality}"
+puts "Total Ultraviolet upgradeable movies: ".rjust(30) + "#{d2d.ultraviolet}"
+print "\n\n"
 
 exit 0
 
