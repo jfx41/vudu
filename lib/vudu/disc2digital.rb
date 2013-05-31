@@ -3,7 +3,7 @@ require 'csv'
 require 'cgi'
 require 'json'
 require 'diff/lcs'
-require 'net/http'
+require 'open-uri'
 require 'bigdecimal'
 
 class Array
@@ -190,24 +190,39 @@ class Disc2Digital
 
       vudu_api = 'http://apicache.vudu.com/api2/claimedAppId/myvudu/format/application*2Fjson/callback/DirectorSequentialCallback/_type/catalogItemTitleSearch/count/10/followup/totalCount/onlyConvertible/true/titleMagic/'
       vudu_api << CGI.escape(title)
+      body = open(vudu_api,
+        'Accept-Language' => 'en-US,en;q=0.8',
+        'Referer' => 'http://www.vudu.com/disc_to_digital.html',
+        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22').read
+        #'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22') {|f|
+        #  puts f.methods.sort
+        #}
+        #'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22') {|f|
+        #  f.each_line {|line| puts line}
+      #}
 
-      uri = URI.parse(vudu_api)
-      req = Net::HTTP::Get.new(uri)
 
-      req['Accept-Language'] = 'en-US,en;q=0.8'
-      req['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22'
-      req['Referer'] = 'http://www.vudu.com/disc_to_digital.html'
+      #uri = URI.parse(vudu_api)
+      #req = Net::HTTP::Get.new(uri)
+
+      #pp res
+
+      #exit
+
+      #req['Accept-Language'] = 'en-US,en;q=0.8'
+      #req['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22'
+      #req['Referer'] = 'http://www.vudu.com/disc_to_digital.html'
 
       #req['Accept-Encoding'] = 'gzip,deflate,sdch'
       #req['Accept-Charset'] = 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
 
       #req['If-Modified-Since'] = file.mtime.rfc2822
 
-      res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-        http.request(req)
-      }
+      #res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+      #  http.request(req)
+      #}
 
-      res = self.parse_json res.body
+      res = self.parse_json body
       res[:myMovie] = self.entry
 
       # DirectorSequentialCallback({"_type":"catalogItemTitleList","catalogItemTitle":[{"_type":"catalogItemTitle","catalogItemId":["240935"],"contentId":["5710"],"discType":["bluRay"],"sameQualityContentVariantId":["162841"],"sameQualityLabel":["hdx"],"sameQualityPrice":["2"],"sameQualityWalmartUpc":["68113103688"],"title":["Bourne Identity "],"year":["2002"]},{"_type":"catalogItemTitle","catalogItemId":["240934"],"contentId":["5710"],"discType":["dvd"],"sameQualityContentVariantId":["146743"],"sameQualityLabel":["sd"],"sameQualityPrice":["2"],"sameQualityWalmartUpc":["60538803606"],"title":["Bourne Identity "],"upgradeQualityContentVariantId":["162841"],"upgradeQualityLabel":["hdx"],"upgradeQualityPrice":["5"],"upgradeQualityWalmartUpc":["60538803611"],"year":["2002"]},{"_type":"catalogItemTitle","catalogItemId":["212456"],"contentId":["5710"],"discType":["bluRay"],"sameQualityContentVariantId":["162841"],"sameQualityLabel":["hdx"],"sameQualityPrice":["2"],"sameQualityWalmartUpc":["68113103688"],"title":["The Bourne Identity "],"year":["2002"]},{"_type":"catalogItemTitle","catalogItemId":["123619"],"contentId":["5710"],"discType":["dvd"],"sameQualityContentVariantId":["146743"],"sameQualityLabel":["sd"],"sameQualityPrice":["2"],"sameQualityWalmartUpc":["60538803606"],"title":["The Bourne Identity "],"upgradeQualityContentVariantId":["162841"],"upgradeQualityLabel":["hdx"],"upgradeQualityPrice":["5"],"upgradeQualityWalmartUpc":["60538803611"],"year":["2002"]}],"moreAbove":["false"],"moreBelow":["false"],"zoom":[{"_type":"zoomData","doItMsec":["82"],"servletMsec":["81","84"]}]})

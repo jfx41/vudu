@@ -13,6 +13,10 @@ Gem::Specification.new do |s|
   s.email = ["jfa@packetdamage.com"]
   s.homepage = "http://github.com/jfx41/vudu"
 
+  s.required_ruby_version = '>= 1.9.3'
+  s.bindir = 'bin'
+  s.executables << 'vudu'
+
   # Runtime dependencies
   s.add_dependency "bigdecimal", ">= 1.1.0"
   s.add_dependency "diff-lcs", ">= 1.2.1"
