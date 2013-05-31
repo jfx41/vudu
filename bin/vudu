@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
 require 'vudu/disc2digital'
 
 abort "usage: #{File.basename $0} Movies.csv" if ARGV[0].nil?
@@ -50,7 +51,8 @@ while d2d.entry != nil
    json = d2d.query d2d.title
 
    #Dir.mkdir "catalog/#{d2d.id}" unless File.directory? "catalog/#{id}"
-   Dir.mkdir cache_dir unless File.directory? cache_dir
+   #Dir.mkdir cache_dir unless File.directory? cache_dir
+   FileUtils::mkdir_p cache_dir unless File.directory? cache_dir
 
    File.open(entry_json, "w") do |f|
       f.write JSON.pretty_generate json 

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_dependency "bigdecimal", ">= 1.1.0"
   s.add_dependency "diff-lcs", ">= 1.2.1"
+  s.add_dependency "fileutils"
   s.add_dependency "json"
 
   s.files         = `git ls-files`.split("\n")
