@@ -16,13 +16,7 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_dependency "bigdecimal", ">= 1.1.0"
   s.add_dependency "diff-lcs", ">= 1.2.1"
-  s.add_dependency "open-uri"
   s.add_dependency "json"
-
-  # Development dependencies
-  #s.add_development_dependency "rake"
-  #s.add_development_dependency "rspec", "~> 2.0"
-  #s.add_development_dependency "mocha", ">= 0.9"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
