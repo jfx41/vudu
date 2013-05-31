@@ -2,7 +2,10 @@
 
 require 'vudu/disc2digital'
 
-d2d = Vudu::D2D.new ARGV[0] || 'My Movies.csv'
+abort "usage: #{File.basename $0} Movies.csv" if ARGV[0].nil?
+
+
+d2d = Vudu::Disc2Digital.new ARGV[0]
 
 upgrade = 0
 cost    = 0
