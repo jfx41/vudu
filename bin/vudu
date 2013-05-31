@@ -4,7 +4,6 @@ require 'vudu/disc2digital'
 
 abort "usage: #{File.basename $0} Movies.csv" if ARGV[0].nil?
 
-
 d2d = Vudu::Disc2Digital.new ARGV[0]
 
 upgrade = 0
@@ -14,9 +13,10 @@ upgrade_quality = 0
 mixitup = Random.new
 
 while d2d.entry != nil
-   #puts "D2D.class(#{d2d.pos}): #{d2d.title.class} #{d2d.title}"
-   entry_dir = "catalog/#{d2d.id}"
-   entry_json = "#{entry_dir}/#{d2d.barcode}.json"
+   # TODO: cache_dir -> cache_dir (~/.vudu/cache/)
+   # For the time being, just use /tmp/vudu-USER/
+   cache_dir = "/tmp/vudu-cache-#{ENV['USER']}/#{d2d.id}"
+   entry_json = "#{cache_dir}/#{d2d.barcode}.json"
 
    #puts "\tBARCODE: #{d2d.barcode}"
 
@@ -50,7 +50,7 @@ while d2d.entry != nil
    json = d2d.query d2d.title
 
    #Dir.mkdir "catalog/#{d2d.id}" unless File.directory? "catalog/#{id}"
-   Dir.mkdir entry_dir unless File.directory? entry_dir
+   Dir.mkdir cache_dir unless File.directory? cache_dir
 
    File.open(entry_json, "w") do |f|
       f.write JSON.pretty_generate json 

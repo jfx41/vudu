@@ -1,0 +1,12 @@
+TODO:
+
+  1. Add: optarg support:
+  1.1. --help
+  1.2. --catalog (Movies.csv)
+  1.3. --cache-dir (entry_dir; Cached results, picks up where you left off)
+  1.4. --init (Creates ~/.vudu/cache/, ~/.vudu.conf)
+
+  2. The results output is lame.  You should probably fix that.
+
+  3. Fix the maff that calculates the title match percentage (non-exact matches)
+
