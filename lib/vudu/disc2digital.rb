@@ -4,7 +4,7 @@ require 'cgi'
 require 'json'
 require 'diff/lcs'
 require 'open-uri'
-require 'bigdecimal'
+require 'similar_text'
 
 class Array
    def symbolize_keys! skip=[]
